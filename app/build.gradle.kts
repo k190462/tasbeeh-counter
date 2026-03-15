@@ -19,10 +19,32 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("KEYSTORE_PATH")
+            if (keystorePath != null) {
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                    ?: error("KEYSTORE_PASSWORD is required when KEYSTORE_PATH is set")
+                keyAlias = System.getenv("KEY_ALIAS")
+                    ?: error("KEY_ALIAS is required when KEYSTORE_PATH is set")
+                keyPassword = System.getenv("KEY_PASSWORD")
+                    ?: error("KEY_PASSWORD is required when KEYSTORE_PATH is set")
+            } else {
+                // Fall back to debug keystore for local/CI builds
+                storeFile = file(System.getProperty("user.home") + "/.android/debug.keystore")
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
