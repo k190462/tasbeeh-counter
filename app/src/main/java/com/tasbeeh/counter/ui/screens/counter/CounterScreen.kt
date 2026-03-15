@@ -196,10 +196,12 @@ fun CounterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Progress indicator (based on nearest milestone)
-            val nextMilestone = listOf(25, 50, 100, 500, 1000).firstOrNull { it > uiState.count } ?: 1000
-            val progress = if (nextMilestone > 0) {
-                (uiState.count.toFloat() % nextMilestone) / nextMilestone
-            } else 0f
+            val milestoneList = listOf(0, 25, 50, 100, 500, 1000)
+            val nextMilestone = milestoneList.firstOrNull { it > uiState.count } ?: 1000
+            val prevMilestone = milestoneList.lastOrNull { it <= uiState.count } ?: 0
+            val progress = if (nextMilestone > prevMilestone) {
+                (uiState.count - prevMilestone).toFloat() / (nextMilestone - prevMilestone)
+            } else 1f
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
