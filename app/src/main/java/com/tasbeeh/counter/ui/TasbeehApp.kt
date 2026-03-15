@@ -3,6 +3,7 @@ package com.tasbeeh.counter.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,7 +19,7 @@ import com.tasbeeh.counter.ui.theme.TasbeehCounterTheme
 @Composable
 fun TasbeehApp() {
     val context = LocalContext.current
-    val userPreferences = UserPreferences(context)
+    val userPreferences = remember { UserPreferences(context) }
     val themeMode by userPreferences.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
 
     TasbeehCounterTheme(themeMode = themeMode) {

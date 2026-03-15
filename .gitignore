@@ -31,6 +31,9 @@ captures/
 *.iml
 .idea/
 
+# Local configuration file (SDK path)
+local.properties
+
 # Keystore files
 *.jks
 *.keystore
